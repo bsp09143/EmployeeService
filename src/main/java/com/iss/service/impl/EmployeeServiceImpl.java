@@ -20,6 +20,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     return result;
   }
 
+
   @Override
   public void insertEmployees(List<Employee> employees) {
     employeeDao.insertEmployees(employees);
@@ -38,10 +39,11 @@ public class EmployeeServiceImpl implements EmployeeService {
   }
 
   @Override
-  public boolean deleteEmployeeeById(String empId)throws EmployeeException {
+  public boolean deleteEmployeeeById(String empId) throws EmployeeException {
 
     return employeeDao.deleteEmployeeById(empId);
   }
+
 
 
 }

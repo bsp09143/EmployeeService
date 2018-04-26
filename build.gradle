@@ -35,4 +35,6 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')	
 	compile("org.slf4j:slf4j-api:1.6.6")
     compile("org.aspectj:aspectjweaver:1.8.8")
+    compile("org.apache.commons:commons-lang3")
+    compile("org.apache.httpcomponents:httpclient")
 }

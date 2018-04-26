@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -22,6 +24,7 @@ import com.iss.model.Employee;
 public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDAO {
   @Autowired
   DataSource dataSource;
+  Logger log = LoggerFactory.getLogger(this.getClass());
 
   @PostConstruct
   private void initialize() {
@@ -78,40 +81,37 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDAO {
   }
 
   @Override
-  public Employee getEmployeeById(String empId)  throws EmployeeException{
+  public Employee getEmployeeById(String empId) throws EmployeeException {
     String sql = "SELECT * FROM employee WHERE empId = ?";
     Employee emp = new Employee();
-	try {
-		emp = getJdbcTemplate().queryForObject(sql, new Object[] {empId}, new RowMapper<Employee>() {
-		    @Override
-		    public Employee mapRow(ResultSet rs, int rwNumber) throws SQLException {
-		      Employee emp = new Employee();
-		      emp.setEmpId(rs.getString("empId"));
-		      emp.setEmpName(rs.getString("empName"));
-		      return emp;
-		    }
-		  });
-	} catch (DataAccessException e)
-	{
-		return null;
-	}
+    try {
+      emp = getJdbcTemplate().queryForObject(sql, new Object[] {empId}, new RowMapper<Employee>() {
+        @Override
+        public Employee mapRow(ResultSet rs, int rwNumber) throws SQLException {
+          Employee emp = new Employee();
+          emp.setEmpId(rs.getString("empId"));
+          emp.setEmpName(rs.getString("empName"));
+          return emp;
+        }
+      });
+    } catch (DataAccessException e) {
+      log.error("Data Access Exception" + e);
+      return null;
+    }
     return emp;
   }
 
   @Override
-  public boolean deleteEmployeeById(String empId) throws EmployeeException{
+  public boolean deleteEmployeeById(String empId) throws EmployeeException {
     boolean result;
     try {
       String sql = "DELETE FROM employee WHERE empId = ?";
       int id = getJdbcTemplate().update(sql, new Object[] {empId});
-      if(id == 0)
-      {
-    	  result = false;
+      if (id == 0) {
+        result = false;
+      } else {
+        result = true;
       }
-      else
-      {
-    	  result = true;  
-      }      
     } catch (DataAccessException e) {
       result = false;
       e.printStackTrace();
