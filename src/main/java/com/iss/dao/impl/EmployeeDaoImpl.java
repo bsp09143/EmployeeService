@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import com.iss.dao.EmployeeDAO;
+import com.iss.exception.EmployeeException;
 import com.iss.model.Employee;
 
 @Repository
@@ -77,26 +78,40 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDAO {
   }
 
   @Override
-  public Employee getEmployeeById(String empId) {
+  public Employee getEmployeeById(String empId)  throws EmployeeException{
     String sql = "SELECT * FROM employee WHERE empId = ?";
-    return getJdbcTemplate().queryForObject(sql, new Object[] {empId}, new RowMapper<Employee>() {
-      @Override
-      public Employee mapRow(ResultSet rs, int rwNumber) throws SQLException {
-        Employee emp = new Employee();
-        emp.setEmpId(rs.getString("empId"));
-        emp.setEmpName(rs.getString("empName"));
-        return emp;
-      }
-    });
+    Employee emp = new Employee();
+	try {
+		emp = getJdbcTemplate().queryForObject(sql, new Object[] {empId}, new RowMapper<Employee>() {
+		    @Override
+		    public Employee mapRow(ResultSet rs, int rwNumber) throws SQLException {
+		      Employee emp = new Employee();
+		      emp.setEmpId(rs.getString("empId"));
+		      emp.setEmpName(rs.getString("empName"));
+		      return emp;
+		    }
+		  });
+	} catch (DataAccessException e)
+	{
+		return null;
+	}
+    return emp;
   }
 
   @Override
-  public boolean deleteEmployeeById(String empId) {
+  public boolean deleteEmployeeById(String empId) throws EmployeeException{
     boolean result;
     try {
       String sql = "DELETE FROM employee WHERE empId = ?";
-      getJdbcTemplate().update(sql, new Object[] {empId});
-      result = true;
+      int id = getJdbcTemplate().update(sql, new Object[] {empId});
+      if(id == 0)
+      {
+    	  result = false;
+      }
+      else
+      {
+    	  result = true;  
+      }      
     } catch (DataAccessException e) {
       result = false;
       e.printStackTrace();

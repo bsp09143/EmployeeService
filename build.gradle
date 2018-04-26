@@ -27,10 +27,12 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-jdbc')
 	compile('org.springframework.boot:spring-boot-starter-security')
+	testCompile('org.springframework.security:spring-security-test')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	runtime('com.microsoft.sqlserver:mssql-jdbc')
-	runtime('mysql:mysql-connector-java')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('org.springframework.security:spring-security-test')
+	runtime('mysql:mysql-connector-java')	
+	testCompile('org.springframework.boot:spring-boot-starter-test')	
+	compile("org.slf4j:slf4j-api:1.6.6")
+    compile("org.aspectj:aspectjweaver:1.8.8")
 }

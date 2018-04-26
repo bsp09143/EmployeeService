@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.iss.dao.EmployeeDAO;
+import com.iss.exception.EmployeeException;
 import com.iss.model.Employee;
 import com.iss.service.EmployeeService;
 
@@ -31,13 +32,13 @@ public class EmployeeServiceImpl implements EmployeeService {
   }
 
   @Override
-  public Employee getEmployeeById(String empId) {
+  public Employee getEmployeeById(String empId) throws EmployeeException {
     Employee employee = employeeDao.getEmployeeById(empId);
     return employee;
   }
 
   @Override
-  public boolean deleteEmployeeeById(String empId) {
+  public boolean deleteEmployeeeById(String empId)throws EmployeeException {
 
     return employeeDao.deleteEmployeeById(empId);
   }
