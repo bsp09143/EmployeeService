@@ -54,7 +54,7 @@ public class EmployeeController {
   // }
 
   @PostMapping("/employee")
-  public ResponseEntity<Employee> registerUsingForm(@RequestBody Employee employee) {
+  public ResponseEntity<Employee> registerUsingForm(@ModelAttribute Employee employee) {
     boolean result = employeeService.insertEmployee(employee);
     if (result == false)
       return ResponseEntity.noContent().build();
